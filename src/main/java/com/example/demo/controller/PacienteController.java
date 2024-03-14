@@ -22,22 +22,22 @@ public class PacienteController {
 	@Autowired
 	private PacienteRepository pacienteRepository;
 
-	@PostMapping(path = "/new")
-	public @ResponseBody String nuevo(@RequestParam String cedula, @RequestParam String nombres,
-			@RequestParam String apellidos, @RequestParam LocalDate fecha_nacimiento, @RequestParam String residencia,
-			@RequestParam String telefono, @RequestParam String email) {
-		Paciente p = new Paciente();
-		p.setCedula(cedula);
-		p.setNombres(nombres);
-		p.setApellidos(apellidos);
-		p.setFecha_nacimiento(fecha_nacimiento);
-		p.setResidencia(residencia);
-		p.setTelefono(telefono);
-		p.setEmail(email);
+		@PostMapping(path = "/new")
+		public @ResponseBody String nuevo(@RequestParam String cedula, @RequestParam String nombres,
+				@RequestParam String apellidos, @RequestParam LocalDate fecha_nacimiento, @RequestParam String residencia,
+				@RequestParam String telefono, @RequestParam String email) {
+			Paciente p = new Paciente();
+			p.setCedula(cedula);
+			p.setNombres(nombres);
+			p.setApellidos(apellidos);
+			p.setFecha_nacimiento(fecha_nacimiento);
+			p.setResidencia(residencia);
+			p.setTelefono(telefono);
+			p.setEmail(email);
 
-		pacienteRepository.save(p);
-		return "Listo";
-	}
+			pacienteRepository.save(p);
+			return "Listo";
+		}
 
 	@GetMapping(path = "/all")
 	public @ResponseBody Iterable<Paciente> listarTodos() {
