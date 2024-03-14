@@ -3,6 +3,9 @@ plugins {
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
+compileJava {
+    options.compilerArgs << "-parameters"
+}
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'

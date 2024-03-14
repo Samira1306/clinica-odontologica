@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmar Eliminación de Odontólogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-5">
+        <h1 class="text-3xl font-bold">Eliminación de Odontólogo</h1>
+        <p class="mt-4">¿Estás seguro de que deseas eliminar este registro?</p>
+        <form action="/odontologo/delete/${odontologo.id}" method="post" class="mt-4">
+            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded">Eliminar</button>
+            <a href="/odontologo/all_frontend" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>
+
+
+

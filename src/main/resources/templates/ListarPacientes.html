@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lista de Pacientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-8">Pacientes</h1>
+        <table class="table-auto w-full">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2">Cédula</th>
+                    <th class="px-4 py-2">Nombre</th>
+                    <th class="px-4 py-2">Apellidos</th>
+                    <th class="px-4 py-2">Fecha de Nacimiento</th>
+                    <th class="px-4 py-2">Residencia</th>
+                    <th class="px-4 py-2">Teléfono</th>
+                    <th class="px-4 py-2">Email</th>
+                    <th class="px-4 py-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="paciente : ${pacientes}">
+                    <td class="border px-4 py-2" th:text="${paciente.cedula}"></td>
+                    <td class="border px-4 py-2" th:text="${paciente.nombres}"></td>
+                    <td class="border px-4 py-2" th:text="${paciente.apellidos}"></td>
+                    <td class="border px-4 py-2" th:text="${paciente.fecha_nacimiento}"></td>
+                    <td class="border px-4 py-2" th:text="${paciente.residencia}"></td>
+                    <td class="border px-4 py-2" th:text="${paciente.telefono}"></td>
+                    <td class="border px-4 py-2" th:text="${paciente.email}"></td>
+                    <td class="border px-4 py-2">
+                        <div class="flex">
+                            <form th:action="@{'/paciente/delete/' + ${paciente.cedula}}" method="post">
+                                <button type="submit"
+                                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Borrar</button>
+                            </form>
+                            <form th:action="@{'/paciente/update/' + ${paciente.cedula}}" method="post" class="ml-2">
+                                <button type="submit"
+                                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Actualizar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+            onclick="location.href='/paciente/new_frontend'">Nuevo paciente</button>
+        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 ml-4"
+            onclick="location.href=''">Buscar paciente</button>
+    </div>
+</body>
+
+</html>

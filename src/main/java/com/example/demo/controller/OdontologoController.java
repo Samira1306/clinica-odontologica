@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,40 +37,85 @@ public class OdontologoController {
 		return "Listo";
 	}
 
+	@GetMapping("/new_frontend")
+	public String mostrarFormularioNuevo() {
+		return "nuevoOdontologo";
+	}
+
+	@PostMapping("/new_frontend")
+	public String nuevo(@RequestParam("nombres") String nombres,
+			@RequestParam("apellidos") String apellidos,
+			@RequestParam("especialidad") String especialidad,
+			@RequestParam("telefono") String telefono,
+			@RequestParam("email") String email,
+			Model model) {
+		Odontologo o = new Odontologo();
+		o.setNombres(nombres);
+		o.setApellidos(apellidos);
+		o.setEspecialidad(especialidad);
+		o.setTelefono(telefono);
+		o.setEmail(email);
+
+		odontologoRepository.save(o);
+
+		model.addAttribute("mensaje", "Odontólogo creado correctamente");
+		return "creaciónOdontologo";
+	}
+
 	@GetMapping(path = "/all")
 	public @ResponseBody Iterable<Odontologo> listarTodos() {
 		return odontologoRepository.findAll();
 	}
 
-	@DeleteMapping(path = "/delete")
-	public @ResponseBody String eliminar(@RequestParam int id) {
-		if (odontologoRepository.existsById(id)) {
-			odontologoRepository.deleteById(id);
-			return "Odontólogo eliminado exitosamente";
-		}
-
-		return "El odontólogo con el ID proporcionado no existe";
+	@GetMapping(path = "/all_Odontologo")
+	public String listarTodos_frontend(Model modelo) {
+		ArrayList<Odontologo> lista = (ArrayList<Odontologo>) odontologoRepository.findAll();
+		modelo.addAttribute("odontologos", lista);
+		return "listarOdontologo";
 	}
 
-	@PostMapping(path = "/update")
-	public @ResponseBody String actualizarDato(@RequestParam int id, @RequestParam(required = false) String nombres,
-			@RequestParam(required = false) String apellidos, @RequestParam(required = false) String especialidad,
-			@RequestParam(required = false) String telefono, @RequestParam(required = false) String email) {
+	@GetMapping("/delete/{id}")
+	public String mostrarConfirmacionEliminar(@PathVariable int id, Model model) {
+		Odontologo odontologo = odontologoRepository.findById(id).get();
+		model.addAttribute("odontologo", odontologo);
+		return "EliminarOdontologo";
+	}
 
+	@PostMapping("/delete")
+	public String eliminar(@RequestParam int id) {
+		odontologoRepository.deleteById(id);
+		return "redirect:/odontologo/all_frontend";
+	}
+
+	@GetMapping("/update/{id}")
+	public String mostrarFormularioActualizar(@PathVariable int id, Model model) {
 		Optional<Odontologo> optionalOdontologo = odontologoRepository.findById(id);
 		if (optionalOdontologo.isPresent()) {
-
 			Odontologo odontologo = optionalOdontologo.get();
-			odontologo.setNombres(nombres != null ? nombres : odontologo.getNombres());
-			odontologo.setApellidos(apellidos != null ? apellidos : odontologo.getApellidos());
-			odontologo.setEspecialidad(especialidad != null ? especialidad : odontologo.getEspecialidad());
-			odontologo.setTelefono(telefono != null ? telefono : odontologo.getTelefono());
-			odontologo.setEmail(email != null ? email : odontologo.getEmail());
+			model.addAttribute("odontologo", odontologo);
+			return "actualizarOdontologo";
+		} else {
+			return "redirect:/odontologo/all_frontend";
+		}
+	}
+
+	@PostMapping("/update")
+	public String actualizar(@RequestParam int id, @RequestParam String nombres,
+			@RequestParam String apellidos, @RequestParam String especialidad,
+			@RequestParam String telefono, @RequestParam String email) {
+		Optional<Odontologo> optionalOdontologo = odontologoRepository.findById(id);
+		if (optionalOdontologo.isPresent()) {
+			Odontologo odontologo = optionalOdontologo.get();
+			odontologo.setNombres(nombres);
+			odontologo.setApellidos(apellidos);
+			odontologo.setEspecialidad(especialidad);
+			odontologo.setTelefono(telefono);
+			odontologo.setEmail(email);
 
 			odontologoRepository.save(odontologo);
-			return "Odontólogo actualizado exitosamente";
+			return "redirect:/odontologo/all_Odontologo";
 		} else {
-			return "El odontólogo con el ID proporcionado no existe";
+			return "redirect:/odontologo/all_Odontologo";
 		}
 	}
 

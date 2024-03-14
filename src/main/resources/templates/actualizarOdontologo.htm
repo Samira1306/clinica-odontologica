@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Actualizar Odontólogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-5">
+        <h1 class="text-3xl font-bold mt-5">Actualizar Odontólogo</h1>
+        <form action="/odontologo/update" method="post">
+            <input type="hidden" name="id" th:value="${odontologo.id}">
+            <label class="block mt-4">
+                <span class="text-gray-700">Nombres:</span>
+                <input type="text" name="nombres" th:value="${odontologo.nombres}" class="form-input mt-1 block w-full"
+                    required>
+            </label>
+            <label class="block mt-4">
+                <span class="text-gray-700">Apellidos:</span>
+                <input type="text" name="apellidos" th:value="${odontologo.apellidos}"
+                    class="form-input mt-1 block w-full" required>
+            </label>
+            <label class="block mt-4">
+                <span class="text-gray-700">Especialidad:</span>
+                <input type="text" name="especialidad" th:value="${odontologo.especialidad}"
+                    class="form-input mt-1 block w-full" required>
+            </label>
+            <label class="block mt-4">
+                <span class="text-gray-700">Teléfono:</span>
+                <input type="text" name="telefono" th:value="${odontologo.telefono}"
+                    class="form-input mt-1 block w-full" required>
+            </label>
+            <label class="block mt-4">
+                <span class="text-gray-700">Email:</span>
+                <input type="email" name="email" th:value="${odontologo.email}" class="form-input mt-1 block w-full"
+                    required>
+            </label>
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Actualizar
+                Odontólogo</button>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Odontólogos</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-8">Odontólogos</h1>
+        <table class="table-auto w-full">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2">ID</th>
+                    <th class="px-4 py-2">Nombre</th>
+                    <th class="px-4 py-2">Apellidos</th>
+                    <th class="px-4 py-2">Especialidad</th>
+                    <th class="px-4 py-2">Teléfono</th>
+                    <th class="px-4 py-2">Email</th>
+                    <th class="px-4 py-2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="odontologo : ${odontologos}">
+                    <td class="border px-4 py-2" th:text="${odontologo.id}"></td>
+                    <td class="border px-4 py-2" th:text="${odontologo.nombres}"></td>
+                    <td class="border px-4 py-2" th:text="${odontologo.apellidos}"></td>
+                    <td class="border px-4 py-2" th:text="${odontologo.especialidad}"></td>
+                    <td class="border px-4 py-2" th:text="${odontologo.telefono}"></td>
+                    <td class="border px-4 py-2" th:text="${odontologo.email}"></td>
+                    <td class="border px-4 py-2">
+                        <div class="flex">
+                            <form th:action="@{'/odontologo/delete/' + ${odontologo.id}}" method="post">
+                                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Borrar</button>
+                            </form>
+                            <form th:action="@{'/odontologo/update/' + ${odontologo.id}}" method="post" class="ml-2">
+                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Actualizar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" onclick="location.href='/odontologo/new_frontend'">Nuevo odontólogo</button>
+        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 ml-4" onclick="location.href=''">Buscar odontólogo</button>
+    </div>
+</body>
+</html>
