@@ -40,45 +40,50 @@ public class CitasController {
 
 
     @PostMapping("/agendarCita")
-    public ResponseEntity<String> agendarCita(@RequestBody Map<String, String> request) {
-        LocalDate fecha = LocalDate.parse(request.get("fecha"));
-        LocalTime hora = LocalTime.parse(request.get("hora"));
-        String motivoConsulta = request.get("motivoConsulta");
-        String cedulaPaciente = request.get("cedulaPaciente");
-    
-        
-        Optional<Paciente> optionalPaciente = pacienteRepository.findByCedula(cedulaPaciente);
-        if (!optionalPaciente.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró al paciente con la cédula proporcionada.");
-        }
-    
-        Paciente paciente = optionalPaciente.get();
-    
-       
+public ResponseEntity<String> agendarCita(@RequestBody Map<String, Object> request) {
+    LocalDate fecha = LocalDate.parse((String) request.get("fecha"));
+    LocalTime hora = LocalTime.parse((String) request.get("hora"));
+    String motivoConsulta = (String) request.get("motivoConsulta");
+    String cedulaPaciente = (String) request.get("cedulaPaciente");
+
+    // Buscar al paciente por su cédula
+    Optional<Paciente> pacienteOptional = pacienteRepository.findByCedula(cedulaPaciente);
+    if (pacienteOptional.isPresent()) {
+        Paciente paciente = pacienteOptional.get();
+
+        // Verificar si la hora está ocupada en la misma fecha
         List<Cita> citasEnLaMismaHora = citaRepository.findByFechaAndHora(fecha, hora);
         if (!citasEnLaMismaHora.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La hora seleccionada ya está ocupada.");
         }
-    
-    
+
+        // Verificar el rango horario
         if ((hora.isBefore(LocalTime.of(8, 0)) || hora.isAfter(LocalTime.of(12, 0))) &&
             (hora.isBefore(LocalTime.of(14, 0)) || hora.isAfter(LocalTime.of(17, 0)))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La hora seleccionada no está dentro del rango permitido.");
         }
-    
-        
+
+        // Crear la nueva cita
         Cita nuevaCita = new Cita();
         nuevaCita.setFecha(fecha);
         nuevaCita.setHora(hora);
         nuevaCita.setMotivoConsulta(motivoConsulta);
         nuevaCita.setEstado("CONFIRMADA");
         nuevaCita.setPaciente(paciente); 
-    
-       
+
+        
         citaRepository.save(nuevaCita);
-    
+
         return ResponseEntity.ok("Cita agendada correctamente.");
+    } else {
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ningún paciente con la cédula especificada.");
+    
     }
+        
+    
+}
+       
     @PostMapping("/cancelarCita")
     public ResponseEntity<String> cancelarCita(@RequestParam int citaId) {
     Optional<Cita> optionalCita = citaRepository.findById(citaId);
