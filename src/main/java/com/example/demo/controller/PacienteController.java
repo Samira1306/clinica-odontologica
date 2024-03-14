@@ -24,22 +24,22 @@ public class PacienteController {
 	@Autowired
 	private PacienteRepository pacienteRepository;
 
-		@PostMapping(path = "/new")
-		public @ResponseBody String nuevo(@RequestParam String cedula, @RequestParam String nombres,
-				@RequestParam String apellidos, @RequestParam LocalDate fecha_nacimiento, @RequestParam String residencia,
-				@RequestParam String telefono, @RequestParam String email) {
-			Paciente p = new Paciente();
-			p.setCedula(cedula);
-			p.setNombres(nombres);
-			p.setApellidos(apellidos);
-			p.setFecha_nacimiento(fecha_nacimiento);
-			p.setResidencia(residencia);
-			p.setTelefono(telefono);
-			p.setEmail(email);
+	@PostMapping(path = "/new")
+	public @ResponseBody String nuevo(@RequestParam String cedula, @RequestParam String nombres,
+			@RequestParam String apellidos, @RequestParam LocalDate fecha_nacimiento, @RequestParam String residencia,
+			@RequestParam String telefono, @RequestParam String email) {
+		Paciente p = new Paciente();
+		p.setCedula(cedula);
+		p.setNombres(nombres);
+		p.setApellidos(apellidos);
+		p.setFecha_nacimiento(fecha_nacimiento);
+		p.setResidencia(residencia);
+		p.setTelefono(telefono);
+		p.setEmail(email);
 
-			pacienteRepository.save(p);
-			return "Listo";
-		}
+		pacienteRepository.save(p);
+		return "Listo";
+	}
 
 	@GetMapping("/new_frontend")
 	public String mostrarFormularioNuevo() {
@@ -98,10 +98,9 @@ public class PacienteController {
 		if (optionalPaciente.isPresent()) {
 			Paciente paciente = optionalPaciente.get();
 			model.addAttribute("paciente", paciente);
-			return "actualizarPaciente"; // Nombre de la vista HTML para el formulario de edición
+			return "actualizarPaciente";
 		} else {
-			// Manejo del caso donde el paciente no se encuentra
-			return "redirect:/paciente/all_paciente"; // Redirige a la lista de pacientes
+			return "redirect:/paciente/all_paciente";
 		}
 	}
 
@@ -119,10 +118,9 @@ public class PacienteController {
 			paciente.setTelefono(telefono);
 			paciente.setEmail(email);
 			pacienteRepository.save(paciente);
-			return "redirect:/paciente/all_paciente"; // Redirige a la lista de pacientes
+			return "redirect:/paciente/all_paciente";
 		} else {
-			// Manejo del caso donde el paciente no se encuentra
-			return "redirect:/paciente/all_paciente"; // Redirige a la lista de pacientes
+			return "redirect:/paciente/all_paciente";
 		}
 	}
 

@@ -46,7 +46,7 @@ public class CitasController {
         String motivoConsulta = request.get("motivoConsulta");
         String cedulaPaciente = request.get("cedulaPaciente");
     
-        // Buscar al paciente por su cédula
+        
         Optional<Paciente> optionalPaciente = pacienteRepository.findByCedula(cedulaPaciente);
         if (!optionalPaciente.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró al paciente con la cédula proporcionada.");
@@ -54,27 +54,27 @@ public class CitasController {
     
         Paciente paciente = optionalPaciente.get();
     
-        // Verificar si la hora está ocupada en la misma fecha
+       
         List<Cita> citasEnLaMismaHora = citaRepository.findByFechaAndHora(fecha, hora);
         if (!citasEnLaMismaHora.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La hora seleccionada ya está ocupada.");
         }
     
-        // Verificar el rango horario
+    
         if ((hora.isBefore(LocalTime.of(8, 0)) || hora.isAfter(LocalTime.of(12, 0))) &&
             (hora.isBefore(LocalTime.of(14, 0)) || hora.isAfter(LocalTime.of(17, 0)))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La hora seleccionada no está dentro del rango permitido.");
         }
     
-        // Crear la nueva cita
+        
         Cita nuevaCita = new Cita();
         nuevaCita.setFecha(fecha);
         nuevaCita.setHora(hora);
         nuevaCita.setMotivoConsulta(motivoConsulta);
         nuevaCita.setEstado("CONFIRMADA");
-        nuevaCita.setPaciente(paciente); // Asignar al paciente a la cita
+        nuevaCita.setPaciente(paciente); 
     
-        // Guardar la cita en la base de datos
+       
         citaRepository.save(nuevaCita);
     
         return ResponseEntity.ok("Cita agendada correctamente.");
@@ -87,7 +87,7 @@ public class CitasController {
         cita.setEstado("CANCELADA");
         citaRepository.save(cita);
         
-        // Marcar la hora como disponible nuevamente
+        
         marcarHoraComoDisponible(cita.getFecha(), cita.getHora());
         
         return ResponseEntity.ok("Cita cancelada correctamente.");
@@ -97,7 +97,7 @@ public class CitasController {
 }
 
 private void marcarHoraComoDisponible(LocalDate fecha, LocalTime hora) {
-    // Obtener la cita con la fecha y hora especificadas
+    
     List<Cita> citasEnLaMismaHora = citaRepository.findByFechaAndHora(fecha, hora);
     if (!citasEnLaMismaHora.isEmpty()) {
         // Marcar la primera cita encontrada como disponible
