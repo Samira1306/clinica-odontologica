@@ -4,12 +4,16 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Tratamiento {
     @Id
+    private int id;
     private LocalDate Fecha;
     private String Procedimientos, Resultados, Medicamentos, Instrucciones_postoperatorias;
+
+    @ManyToOne
     private TipoTratamiento tipoTratamiento;
     public LocalDate getFecha() {
         return Fecha;
